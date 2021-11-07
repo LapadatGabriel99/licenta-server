@@ -123,6 +123,16 @@ public class UserService {
                 bCryptPasswordEncoder.encode(user.getPassword()));
     }
 
+    public User getUserDetails() {
+
+        return authenticationService.getCurrentUser();
+    }
+
+    public User refreshUser() {
+
+        return authenticationService.refreshCurrentUser();
+    }
+
     private Set<Role> manageRoles(Set<Role> roles) throws ResourceNotFoundException {
 
         if (roles == null) {

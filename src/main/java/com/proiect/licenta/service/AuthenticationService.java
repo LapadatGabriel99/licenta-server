@@ -93,10 +93,24 @@ public class AuthenticationService {
 
     @Transactional
     public User getCurrentUser() {
+
         var principal = (UserDetailsImpl)SecurityContextHolder.
                 getContext().getAuthentication().getPrincipal();
         return userRepository.findByUsername(principal.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
+    }
+
+    @Transactional
+    public User refreshCurrentUser() {
+
+        var principal = (UserDetailsImpl)SecurityContextHolder
+                .getContext().getAuthentication().getPrincipal();
+
+        var user = new User();
+        user.setId(principal.getId());
+        user.setUsername(principal.getUsername());
+
+        return user;
     }
 
     private Cookie createHttpOnlyCookie(String name, String content) {

@@ -78,4 +78,16 @@ public class UserController {
 
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
+
+    @GetMapping("/get-user-details")
+    public ResponseEntity<UserDTO> getUserDetails() {
+
+        return new ResponseEntity<>(userConverter.documentToDto(userService.getUserDetails()), HttpStatus.OK);
+    }
+
+    @GetMapping("/refresh-user")
+    public ResponseEntity<UserDTO> refreshUser() {
+
+        return new ResponseEntity<>(userConverter.documentToDto(userService.refreshUser()), HttpStatus.OK);
+    }
 }
