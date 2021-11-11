@@ -48,15 +48,17 @@ public class TestService {
         return test.orElse(null);
     }
 
-    public String delete(Long id) {
+    public boolean delete(Long id) {
 
         var test = findById(id);
+
         if (test == null) {
-            return null;
+
+            return false;
         }
         testRepository.delete(test);
 
-        return "Successfully deleted test entity";
+        return true;
     }
 
     public Test update(Test test) {

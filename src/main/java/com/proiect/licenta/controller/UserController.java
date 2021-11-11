@@ -27,16 +27,16 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<UserDTO> login(@Valid @RequestBody UserDTO userDTO, HttpServletResponse response) {
 
-        return new ResponseEntity<>(userConverter.documentToDto(
-                userService.login(userConverter.dtoToDocument(userDTO), response)),
+        return new ResponseEntity<>(userConverter.modelToDto(
+                userService.login(userConverter.dtoToModel(userDTO), response)),
                 HttpStatus.OK);
     }
 
     @PostMapping("/register")
     public ResponseEntity<UserDTO> register(@Valid @RequestBody UserDTO userDTO) throws MessagingException {
 
-        return new ResponseEntity<>(userConverter.documentToDto(
-                userService.register(userConverter.dtoToDocument(userDTO))),
+        return new ResponseEntity<>(userConverter.modelToDto(
+                userService.register(userConverter.dtoToModel(userDTO))),
                 HttpStatus.CREATED);
     }
 
@@ -74,7 +74,7 @@ public class UserController {
     @PutMapping("/update-password")
     public ResponseEntity updatePassword(@Valid @RequestBody UserDTO userDTO) {
 
-        userService.updatePassword(userConverter.dtoToDocument(userDTO));
+        userService.updatePassword(userConverter.dtoToModel(userDTO));
 
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
@@ -82,12 +82,12 @@ public class UserController {
     @GetMapping("/get-user-details")
     public ResponseEntity<UserDTO> getUserDetails() {
 
-        return new ResponseEntity<>(userConverter.documentToDto(userService.getUserDetails()), HttpStatus.OK);
+        return new ResponseEntity<>(userConverter.modelToDto(userService.getUserDetails()), HttpStatus.OK);
     }
 
     @GetMapping("/refresh-user")
     public ResponseEntity<UserDTO> refreshUser() {
 
-        return new ResponseEntity<>(userConverter.documentToDto(userService.refreshUser()), HttpStatus.OK);
+        return new ResponseEntity<>(userConverter.modelToDto(userService.refreshUser()), HttpStatus.OK);
     }
 }

@@ -10,12 +10,12 @@ public class UserConverter {
     @Autowired
     private ModelMapper mapper;
 
-    public UserDTO documentToDto(User user) {
+    public UserDTO modelToDto(User user) {
 
         return mapper.map(user, UserDTO.class);
     }
 
-    public User dtoToDocument(UserDTO userDTO) {
+    public User dtoToModel(UserDTO userDTO) {
 
         return mapper.map(userDTO, User.class);
     }
