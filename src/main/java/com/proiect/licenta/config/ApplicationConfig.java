@@ -44,4 +44,10 @@ public class ApplicationConfig {
 
         return new AnswerConverter();
     }
+
+    @Bean
+    public LoginConverter loginConverter() {
+
+        return new LoginConverter();
+    }
 }

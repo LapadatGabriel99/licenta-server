@@ -1,9 +1,8 @@
 package com.proiect.licenta.controller;
 
+import com.proiect.licenta.converter.LoginConverter;
 import com.proiect.licenta.converter.UserConverter;
-import com.proiect.licenta.dto.PasswordRecoveryDTO;
-import com.proiect.licenta.dto.ResetPasswordDTO;
-import com.proiect.licenta.dto.UserDTO;
+import com.proiect.licenta.dto.*;
 import com.proiect.licenta.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,11 +23,14 @@ public class UserController {
     @Autowired
     private UserConverter userConverter;
 
-    @PostMapping("/login")
-    public ResponseEntity<UserDTO> login(@Valid @RequestBody UserDTO userDTO, HttpServletResponse response) {
+    @Autowired
+    private LoginConverter loginConverter;
 
-        return new ResponseEntity<>(userConverter.modelToDto(
-                userService.login(userConverter.dtoToModel(userDTO), response)),
+    @PostMapping("/login")
+    public ResponseEntity<LoginDTO> login(@Valid @RequestBody UserDTO userDTO, HttpServletResponse response) {
+
+        return new ResponseEntity<>(loginConverter.modelToDto(
+                userService.login(userConverter.dtoToModel(userDTO))),
                 HttpStatus.OK);
     }
 
@@ -47,11 +49,11 @@ public class UserController {
     }
 
     @DeleteMapping("/logout")
-    public ResponseEntity logout(HttpServletResponse response) {
+    public ResponseEntity<LogoutDTO> logout(@Valid @RequestBody LogoutDTO dto) {
 
-        userService.logout(response);
+        dto.setRemoved(userService.logout(dto.getToken()));
 
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(dto, HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/forgot-password")

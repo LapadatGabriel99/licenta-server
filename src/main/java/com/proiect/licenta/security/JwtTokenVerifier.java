@@ -67,13 +67,6 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
             return headerAuth.replace(TOKEN_PREFIX, "");
         }
 
-        var cookie = WebUtils.getCookie(request, HEADER_STRING);
-
-        if (cookie != null) {
-
-            return cookie.getValue();
-        }
-
         return null;
     }
 }

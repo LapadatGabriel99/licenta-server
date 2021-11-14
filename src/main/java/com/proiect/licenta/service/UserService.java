@@ -1,6 +1,7 @@
 package com.proiect.licenta.service;
 
 import com.proiect.licenta.exception.ResourceNotFoundException;
+import com.proiect.licenta.model.LoginResponse;
 import com.proiect.licenta.model.Role;
 import com.proiect.licenta.model.User;
 import com.proiect.licenta.repository.RoleRepository;
@@ -39,8 +40,8 @@ public class UserService {
     @Autowired
     private ConfirmationTokenService confirmationTokenService;
 
-    public User login(User user, HttpServletResponse response) {
-        return authenticationService.authenticateUser(user, response)
+    public LoginResponse login(User user) {
+        return authenticationService.authenticateUser(user)
                 .orElseThrow(() -> new ResourceNotFoundException(user.getUsername()));
     }
 
@@ -67,9 +68,9 @@ public class UserService {
         return repoUser;
     }
 
-    public void logout(HttpServletResponse response) {
+    public boolean logout(String token) {
 
-        authenticationService.removeCurrentJwtTokenAuthentication(response);
+        return true;
     }
 
     public String confirmToken(String token, boolean isPasswordRecoveryToken) {

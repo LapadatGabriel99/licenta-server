@@ -1,5 +1,6 @@
 package com.proiect.licenta.service;
 
+import com.proiect.licenta.model.LoginResponse;
 import com.proiect.licenta.model.Role;
 import com.proiect.licenta.model.User;
 import com.proiect.licenta.model.UserDetailsImpl;
@@ -12,14 +13,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.proiect.licenta.security.SecurityConstants.HEADER_STRING;
-import static com.proiect.licenta.security.SecurityConstants.TOKEN_PREFIX;
 
 @Service
 public class AuthenticationService {
@@ -33,7 +29,7 @@ public class AuthenticationService {
     @Autowired
     private UserRepository userRepository;
 
-    public Optional<User> authenticateUser(User user, HttpServletResponse response) {
+    public Optional<LoginResponse> authenticateUser(User user) {
 
         var authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
@@ -42,9 +38,6 @@ public class AuthenticationService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         var jwtToken = jwtUtils.generateJwtToken(authentication);
-
-        response.addHeader(HEADER_STRING, TOKEN_PREFIX + jwtToken);
-        response.addCookie(createHttpOnlyCookie(HEADER_STRING, jwtToken));
 
         var userDetails = (UserDetailsImpl)authentication.getPrincipal();
 
@@ -83,12 +76,11 @@ public class AuthenticationService {
 
         user.setEnabled(userDetails.isEnabled());
 
-        return Optional.of(user);
-    }
+        var loginResponse = new LoginResponse();
+        loginResponse.setToken(jwtToken);
+        loginResponse.setUser(user);
 
-    public void removeCurrentJwtTokenAuthentication(HttpServletResponse response) {
-
-        response.addCookie(deleteHttpOnlyCookie(HEADER_STRING));
+        return Optional.of(loginResponse);
     }
 
     @Transactional
@@ -111,25 +103,5 @@ public class AuthenticationService {
         user.setUsername(principal.getUsername());
 
         return user;
-    }
-
-    private Cookie createHttpOnlyCookie(String name, String content) {
-
-        var cookie = new Cookie(name, content);
-        cookie.setMaxAge(10*24*60*60);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-
-        return cookie;
-    }
-
-    private Cookie deleteHttpOnlyCookie(String name) {
-
-        var cookie = new Cookie(name, null);
-        cookie.setMaxAge(0);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-
-        return cookie;
     }
 }
