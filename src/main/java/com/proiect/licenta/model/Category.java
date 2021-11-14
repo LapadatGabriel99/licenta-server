@@ -30,4 +30,8 @@ public class Category {
             orphanRemoval = true,
             fetch = FetchType.LAZY)
     private List<Test> tests;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

@@ -49,8 +49,16 @@ public class User {
     @OneToMany(
             mappedBy = "user",
             cascade = CascadeType.PERSIST,
-            orphanRemoval = false,
+            orphanRemoval = true,
             fetch = FetchType.LAZY
     )
     private List<Test> tests;
+
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.PERSIST,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private List<Category> categories;
 }

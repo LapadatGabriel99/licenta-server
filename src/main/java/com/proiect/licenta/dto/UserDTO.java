@@ -1,7 +1,10 @@
 package com.proiect.licenta.dto;
 
+import com.proiect.licenta.model.Role;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -18,4 +21,6 @@ public class UserDTO {
     private String firstName;
 
     private String lastname;
+
+    private Set<Role> roles;
 }
