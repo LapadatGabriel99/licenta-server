@@ -42,6 +42,14 @@ public class UserController {
                 HttpStatus.CREATED);
     }
 
+    @PostMapping("/update-user-details")
+    public ResponseEntity<UserDTO> updateUserDetails(@Valid @RequestBody UserDTO userDTO) {
+
+        return new ResponseEntity<>(userConverter.modelToDto(
+                userService.updateUserDetails(userConverter.dtoToModel(userDTO))),
+                HttpStatus.ACCEPTED);
+    }
+
     @GetMapping("/confirm")
     public String confirm(@RequestParam("token") String token) {
 

@@ -68,6 +68,20 @@ public class UserService {
         return repoUser;
     }
 
+    public User updateUserDetails(User user) {
+
+        var actualUser = userRepository.findById(user.getId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                String.format("User with username: %s, was not found", user.getUsername())));
+
+        actualUser.setUsername(user.getUsername());
+        actualUser.setEmail(user.getUsername());
+        actualUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+
+        return userRepository.save(actualUser);
+    }
+
     public boolean logout(String token) {
 
         return true;
