@@ -42,7 +42,7 @@ public class UserController {
                 HttpStatus.CREATED);
     }
 
-    @PostMapping("/update-user-details")
+    @PutMapping("/update-user-details")
     public ResponseEntity<UserDTO> updateUserDetails(@Valid @RequestBody UserDTO userDTO) {
 
         return new ResponseEntity<>(userConverter.modelToDto(
