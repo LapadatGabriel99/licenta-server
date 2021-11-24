@@ -51,9 +51,9 @@ public class UserController {
     }
 
     @GetMapping("/confirm")
-    public String confirm(@RequestParam("token") String token) {
+    public ResponseEntity<String> confirm(@RequestParam("token") String token) {
 
-        return userService.confirmToken(token, false);
+        return new ResponseEntity<>(userService.confirmToken(token, false), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/logout")

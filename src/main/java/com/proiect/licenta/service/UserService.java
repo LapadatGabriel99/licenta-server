@@ -55,7 +55,7 @@ public class UserService {
 
         var token = userDetailsService.handleConfirmationToken(repoUser);
 
-        var link = "http://localhost:8080/api/v1.0/user/confirm?token=" + token;
+        var link = "http://localhost:8090/api/user/confirm?token=" + token;
 
         emailService.send(repoUser.getEmail(), buildEmail( repoUser.getUsername(),
                 "Confirm your email",
@@ -152,7 +152,7 @@ public class UserService {
 
         if (roles == null) {
 
-            var userRole = roleRepository.findByName("ROLE_USER")
+            var userRole = roleRepository.findByName("USER")
                     .orElseThrow(() -> new ResourceNotFoundException("The specified Role was not found!"));
 
             roles = new HashSet<>();

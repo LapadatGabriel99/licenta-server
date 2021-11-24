@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class ConfirmationToken {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, name = "token")
@@ -31,6 +31,10 @@ public class ConfirmationToken {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    public ConfirmationToken() {
+
+    }
 
     public ConfirmationToken(String token,
                              LocalDateTime createdAt,

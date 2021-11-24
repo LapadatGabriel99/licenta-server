@@ -49,13 +49,13 @@ public class AuthenticationService {
 
                     switch (item.getAuthority()) {
 
-                        case "ROLE_USER":
-                            role.setName("ROLE_USER");
+                        case "USER":
+                            role.setName("USER");
 
                             return role;
 
-                        case "ROLE_ADMIN":
-                            role.setName("ROLE_ADMIN");
+                        case "ADMIN":
+                            role.setName("ADMIN");
 
                             return role;
                     }
