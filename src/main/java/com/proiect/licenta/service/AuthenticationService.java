@@ -1,5 +1,6 @@
 package com.proiect.licenta.service;
 
+import com.proiect.licenta.exception.AuthenticationRuntimeException;
 import com.proiect.licenta.model.LoginResponse;
 import com.proiect.licenta.model.Role;
 import com.proiect.licenta.model.User;
@@ -8,7 +9,10 @@ import com.proiect.licenta.repository.UserRepository;
 import com.proiect.licenta.security.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -31,14 +35,23 @@ public class AuthenticationService {
 
     public Optional<LoginResponse> authenticateUser(User user) {
 
-        var authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
-        );
+        Authentication authentication;
+
+        try {
+
+            authentication = authenticationManager.authenticate(
+                     new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+        }
+        catch (AuthenticationException ex) {
+
+            throw new AuthenticationRuntimeException(
+                    String.format("Error while trying to authenticate user: %s", user.getUsername()));
+        }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         var jwtToken = jwtUtils.generateJwtToken(authentication);
-
+        
         var userDetails = (UserDetailsImpl)authentication.getPrincipal();
 
         var userRoles = userDetails.getAuthorities()

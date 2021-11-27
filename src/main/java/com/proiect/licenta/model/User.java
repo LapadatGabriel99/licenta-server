@@ -40,7 +40,11 @@ public class User {
     @Column(name = "enabled")
     private boolean enabled;
 
-    @Transient
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "user")

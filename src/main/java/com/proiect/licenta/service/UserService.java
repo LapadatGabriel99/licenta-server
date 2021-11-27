@@ -49,7 +49,7 @@ public class UserService {
 
         user.setRegistrationDate(LocalDateTime.now());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRoles(manageRoles(user.getRoles()));
+        manageRoles(user);
 
         var repoUser = userRepository.save(user);
 
@@ -148,20 +148,17 @@ public class UserService {
         return authenticationService.refreshCurrentUser();
     }
 
-    private Set<Role> manageRoles(Set<Role> roles) throws ResourceNotFoundException {
+    private void manageRoles(User user) throws ResourceNotFoundException {
 
-        if (roles == null) {
+        if (user.getRoles() == null) {
 
-            var userRole = roleRepository.findByName("USER")
-                    .orElseThrow(() -> new ResourceNotFoundException("The specified Role was not found!"));
+            var userRole = new Role();
+            userRole.setName("USER");
+            userRole.setUser(user);
 
-            roles = new HashSet<>();
-            roles.add(userRole);
-
-            return roles;
+            user.setRoles(new HashSet<>());
+            user.getRoles().add(userRole);
         }
-
-        return roles;
     }
 
     private String buildEmail(String name,

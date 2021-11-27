@@ -14,7 +14,10 @@ public class LoginConverter {
 
     public LoginDTO modelToDto(LoginResponse loginResponse) {
 
-        return mapper.map(loginResponse, LoginDTO.class);
+        var loginDTO = mapper.map(loginResponse, LoginDTO.class);
+        loginDTO.setUserDTO(mapper.map(loginResponse.getUser(), UserDTO.class));
+
+        return loginDTO;
     }
 
     public LoginResponse dtoToModel(LoginDTO loginDTO) {
