@@ -96,6 +96,13 @@ public class AuthenticationService {
         return Optional.of(loginResponse);
     }
 
+    public boolean logout() {
+
+        SecurityContextHolder.clearContext();
+
+        return true;
+    }
+
     @Transactional
     public User getCurrentUser() {
 
@@ -114,6 +121,27 @@ public class AuthenticationService {
         var user = new User();
         user.setId(principal.getId());
         user.setUsername(principal.getUsername());
+        user.setRoles(principal.getAuthorities()
+                .stream()
+                .map(item -> {
+
+                    var role = new Role();
+
+                    switch (item.getAuthority()) {
+
+                        case "USER":
+                            role.setName("USER");
+
+                            return role;
+
+                        case "ADMIN":
+                            role.setName("ADMIN");
+
+                            return role;
+                    }
+
+                    return null;
+                }).collect(Collectors.toSet()));
 
         return user;
     }

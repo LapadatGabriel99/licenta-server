@@ -57,11 +57,12 @@ public class UserController {
     }
 
     @DeleteMapping("/logout")
-    public ResponseEntity<LogoutDTO> logout(@Valid @RequestBody LogoutDTO dto) {
+    public ResponseEntity<LogoutDTO> logout() {
 
-        dto.setRemoved(userService.logout(dto.getToken()));
+        var dto = new LogoutDTO();
+        dto.setRemoved(userService.logout());
 
-        return new ResponseEntity<>(dto, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(dto, HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/forgot-password")

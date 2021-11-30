@@ -82,9 +82,9 @@ public class UserService {
         return userRepository.save(actualUser);
     }
 
-    public boolean logout(String token) {
+    public boolean logout() {
 
-        return true;
+        return authenticationService.logout();
     }
 
     public String confirmToken(String token, boolean isPasswordRecoveryToken) {
