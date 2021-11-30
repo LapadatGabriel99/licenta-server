@@ -43,9 +43,9 @@ public class UserController {
     }
 
     @PutMapping("/update-user-details")
-    public ResponseEntity<UserDTO> updateUserDetails(@Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<LoginDTO> updateUserDetails(@Valid @RequestBody UserDTO userDTO) {
 
-        return new ResponseEntity<>(userConverter.modelToDto(
+        return new ResponseEntity<>(loginConverter.modelToDto(
                 userService.updateUserDetails(userConverter.dtoToModel(userDTO))),
                 HttpStatus.ACCEPTED);
     }

@@ -68,7 +68,7 @@ public class UserService {
         return repoUser;
     }
 
-    public User updateUserDetails(User user) {
+    public LoginResponse updateUserDetails(User user) {
 
         var actualUser = userRepository.findById(user.getId())
                 .orElseThrow(() ->
@@ -76,10 +76,19 @@ public class UserService {
                                 String.format("User with username: %s, was not found", user.getUsername())));
 
         actualUser.setUsername(user.getUsername());
-        actualUser.setEmail(user.getUsername());
+        actualUser.setEmail(user.getEmail());
         actualUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        actualUser.setFirstname(user.getFirstname());
+        actualUser.setLastname(user.getLastname());
+        var updatedUser = userRepository.save(actualUser);
 
-        return userRepository.save(actualUser);
+        var jwtToken = authenticationService.updateSecurityContext(user);
+
+        var loginResponse = new LoginResponse();
+        loginResponse.setUser(updatedUser);
+        loginResponse.setToken(jwtToken);
+
+        return loginResponse;
     }
 
     public boolean logout() {

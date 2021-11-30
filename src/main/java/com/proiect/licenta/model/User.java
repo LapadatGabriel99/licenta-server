@@ -1,5 +1,6 @@
 package com.proiect.licenta.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,11 +41,12 @@ public class User {
     @Column(name = "enabled")
     private boolean enabled;
 
+    @JsonManagedReference
     @OneToMany(
             mappedBy = "user",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.EAGER)
+            fetch = FetchType.LAZY)
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "user")

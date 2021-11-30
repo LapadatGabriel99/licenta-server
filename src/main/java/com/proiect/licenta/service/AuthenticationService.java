@@ -108,8 +108,18 @@ public class AuthenticationService {
 
         var principal = (UserDetailsImpl)SecurityContextHolder.
                 getContext().getAuthentication().getPrincipal();
-        return userRepository.findByUsername(principal.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
+
+        var optionalUser = userRepository.findById(principal.getId());
+
+        if (optionalUser.isEmpty()) {
+
+            throw new UsernameNotFoundException(String.format("User with id %d not found - ", principal.getId()));
+        }
+
+        var user = optionalUser.get();
+        user.getRoles();
+
+        return user;
     }
 
     @Transactional
@@ -144,5 +154,27 @@ public class AuthenticationService {
                 }).collect(Collectors.toSet()));
 
         return user;
+    }
+
+    public String updateSecurityContext(User user) {
+
+        SecurityContextHolder.clearContext();
+
+        Authentication authentication;
+
+        try {
+
+            authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+        }
+        catch (AuthenticationException ex) {
+
+            throw new AuthenticationRuntimeException(
+                    String.format("Error while trying to authenticate user: %s", user.getUsername()));
+        }
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return jwtUtils.generateJwtToken(authentication);
     }
 }

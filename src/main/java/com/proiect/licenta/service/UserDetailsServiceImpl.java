@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -23,10 +24,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private ConfirmationTokenService confirmationTokenService;
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) {
 
         var user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User does not exist"));
+        user.getRoles();
 
         return UserDetailsImpl.build(user);
     }
