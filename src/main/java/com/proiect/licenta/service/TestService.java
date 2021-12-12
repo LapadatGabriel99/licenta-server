@@ -23,6 +23,9 @@ public class TestService {
     @Autowired
     private QuestionRepository questionRepository;
 
+    @Autowired
+    private UserService userService;
+
     public Test save(Test test) {
 
         var category = categoryRepository.findById(test.getCategory().getId());
@@ -38,7 +41,10 @@ public class TestService {
     }
 
     public List<Test> findAll() {
-        return testRepository.findAll();
+
+        var user = userService.getUserDetails();
+
+        return testRepository.findAllByUserId(user.getId());
     }
 
     public Test findById(Long id) {
