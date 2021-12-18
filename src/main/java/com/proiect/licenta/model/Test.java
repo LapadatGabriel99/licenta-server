@@ -24,6 +24,9 @@ public class Test {
     @NotBlank(message = "Name can't be empty!")
     private String name;
 
+    @Transient
+    private String categoryName;
+
     @OneToMany(
             mappedBy = "test",
             cascade = CascadeType.PERSIST,

@@ -12,7 +12,10 @@ public class TestConverter {
 
     public TestDTO modelToDTO(Test test) {
 
-        return mapper.map(test, TestDTO.class);
+        var testDTO = mapper.map(test, TestDTO.class);
+        testDTO.setCategoryName(test.getCategory().getTestType());
+
+        return testDTO;
     }
 
     public Test dtoToModel(TestDTO testDTO) {
