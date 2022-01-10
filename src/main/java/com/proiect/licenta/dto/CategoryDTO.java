@@ -15,5 +15,5 @@ public class CategoryDTO {
     @NotBlank(message = "Name can't be empty!")
     private String testType;
 
-    private List<TestDTO> testDTOS;
+    private List<TestDTO> tests;
 }

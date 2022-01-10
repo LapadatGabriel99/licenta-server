@@ -9,11 +9,11 @@ import java.util.List;
 @Setter
 public class QuestionDTO {
 
-    private Long questionId;
+    private Long id;
 
     private String questionText;
 
     private boolean hasMultipleAnswers;
 
-    private List<AnswerDTO> answerDTOS;
+    private List<AnswerDTO> answers;
 }

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class AnswerDTO {
 
-    private Long answerId;
+    private Long id;
 
     private String answerText;
 

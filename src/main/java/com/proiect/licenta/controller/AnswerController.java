@@ -23,7 +23,7 @@ public class AnswerController {
     @Autowired
     private AnswerConverter answerConverter;
 
-    @PostMapping("/{questionId}")
+    @PostMapping("/create/{questionId}")
     public ResponseEntity<AnswerDTO> createAnswer(@PathVariable(value = "questionId") Long questionId,
                                                   @Valid @RequestBody AnswerDTO answerDTO) {
         return new ResponseEntity<>(
@@ -57,7 +57,7 @@ public class AnswerController {
                 HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteAnswer(@PathVariable(value = "id") Long id) {
 
         if (!answerService.deleteAnswer(id)) {

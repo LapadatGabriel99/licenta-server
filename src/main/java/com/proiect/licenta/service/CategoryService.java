@@ -53,7 +53,16 @@ public class CategoryService {
 
     public Optional<Category> findById(Long id) {
 
-        return categoryRepository.findById(id);
+        var cat =  categoryRepository.findById(id);
+
+        if (cat.isEmpty()) {
+
+            throw new ResourceNotFoundException(String.format("Category with id: %d, does not exist!", id));
+        }
+
+        var tests = cat.get().getTests();
+
+        return cat;
     }
 
     public boolean deleteById(Long id) {

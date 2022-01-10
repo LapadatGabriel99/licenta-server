@@ -32,7 +32,7 @@ public class Question {
             cascade = CascadeType.PERSIST,
             fetch = FetchType.LAZY,
             orphanRemoval = true)
-    private List<Answer> answersList;
+    private List<Answer> answers;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "test_id", nullable = false)

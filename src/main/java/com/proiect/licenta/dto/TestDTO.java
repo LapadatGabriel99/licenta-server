@@ -19,5 +19,5 @@ public class TestDTO {
 
     private String categoryName;
 
-    private List<QuestionDTO> questionDTOS;
+    private List<QuestionDTO> questions;
 }

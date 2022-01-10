@@ -22,7 +22,7 @@ public class QuestionController {
     @Autowired
     private QuestionConverter questionConverter;
 
-    @PostMapping("/{testId}")
+    @PostMapping("/create/{testId}")
     public ResponseEntity<QuestionDTO> createQuestion(@PathVariable(value = "testId") Long testId,
                                             @Valid @RequestBody QuestionDTO questionDTO) {
 
@@ -57,7 +57,7 @@ public class QuestionController {
                  HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteQuestion(@PathVariable(value = "id") Long id) {
 
         if (!questionService.deleteQuestion(id)) {
