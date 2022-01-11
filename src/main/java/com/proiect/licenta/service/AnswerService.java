@@ -54,13 +54,13 @@ public class AnswerService {
 
     public boolean deleteAnswer(Long answerId) {
 
-        var answer = questionRepository.findById(answerId);
+        var answer = answerRepository.findById(answerId);
 
         if (answer.isEmpty()) {
             return false;
         }
 
-        questionRepository.deleteById(answerId);
+        answerRepository.deleteById(answerId);
 
         return true;
     }

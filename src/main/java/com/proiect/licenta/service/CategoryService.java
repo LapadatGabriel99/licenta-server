@@ -25,12 +25,12 @@ public class CategoryService {
 
     public Category save(Category category) {
 
-        var user = userRepository.findById(category.getUser().getId());
+        var user = userRepository.findById(userService.getUserDetails().getId());
 
         if (user.isEmpty()) {
 
             throw new ResourceNotFoundException(
-                    String.format("No user with id %d was found.", category.getUser().getId()));
+                    String.format("No user with id %d was found.", userService.getUserDetails().getId()));
         }
 
         if (category.getId() != null) {
