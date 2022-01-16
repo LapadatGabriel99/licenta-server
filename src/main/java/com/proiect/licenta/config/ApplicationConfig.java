@@ -50,4 +50,10 @@ public class ApplicationConfig {
 
         return new LoginConverter();
     }
+
+    @Bean
+    public ScoredTestConverter scoredTestConverter() {
+
+        return new ScoredTestConverter();
+    }
 }
