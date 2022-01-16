@@ -168,6 +168,18 @@ public class UserService {
             user.setRoles(new HashSet<>());
             user.getRoles().add(userRole);
         }
+        else {
+
+            var userRoles = new HashSet<Role>();
+
+            for (var role : user.getRoles()) {
+
+                role.setUser(user);
+                userRoles.add(role);
+            }
+
+            user.setRoles(userRoles);
+        }
     }
 
     private String buildEmail(String name,

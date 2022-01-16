@@ -71,6 +71,11 @@ public class AuthenticationService {
                             role.setName("ADMIN");
 
                             return role;
+
+                        case "PLAYER":
+                            role.setName("PLAYER");
+
+                            return role;
                     }
 
                     return null;
@@ -146,6 +151,11 @@ public class AuthenticationService {
 
                         case "ADMIN":
                             role.setName("ADMIN");
+
+                            return role;
+
+                        case "PLAYER":
+                            role.setName("PLAYER");
 
                             return role;
                     }
