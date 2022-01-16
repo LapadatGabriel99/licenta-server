@@ -34,6 +34,14 @@ public class Test {
             fetch = FetchType.LAZY)
     private List<Question> questions;
 
+    @OneToMany(
+            mappedBy = "test",
+            cascade = CascadeType.PERSIST,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private List<ScoredTest> scoredTests;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
