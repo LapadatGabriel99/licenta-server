@@ -41,6 +41,17 @@ public class TestController {
                 HttpStatus.OK);
     }
 
+    @GetMapping("/player/all")
+    public ResponseEntity<List<TestDTO>> getAllTestsForPlayer() {
+
+        return new ResponseEntity<>(
+                testService.findAllForPlayer()
+                    .stream()
+                    .map(test -> testConverter.modelToDTO(test))
+                    .collect(Collectors.toList()),
+                HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<TestDTO> getTestById(@PathVariable(name = "id") Long id) {
 

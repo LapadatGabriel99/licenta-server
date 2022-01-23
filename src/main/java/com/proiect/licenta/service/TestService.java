@@ -61,6 +61,11 @@ public class TestService {
         return testRepository.findAllByUserId(user.getId());
     }
 
+    public List<Test> findAllForPlayer() {
+        
+        return testRepository.findAll();
+    }
+
     public Test findById(Long id) {
 
         var test = testRepository.findById(id);
