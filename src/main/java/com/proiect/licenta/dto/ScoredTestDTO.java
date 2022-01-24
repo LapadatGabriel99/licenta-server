@@ -11,6 +11,8 @@ public class ScoredTestDTO {
 
     private Long id;
 
+    private Long testId;
+
     @NotBlank(message = "Name can't be empty!")
     private String name;
 

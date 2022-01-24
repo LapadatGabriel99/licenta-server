@@ -12,7 +12,10 @@ public class ScoredTestConverter {
 
     public ScoredTestDTO modelToDTO(ScoredTest scoredTest) {
 
-        return mapper.map(scoredTest, ScoredTestDTO.class);
+        var dto = mapper.map(scoredTest, ScoredTestDTO.class);
+        dto.setTestId(scoredTest.getTest().getId());
+
+        return dto;
     }
 
     public ScoredTest dtoToModel(ScoredTestDTO scoredTestDTO) {
