@@ -13,6 +13,6 @@ public interface ScoredTestRepository extends JpaRepository<ScoredTest, Long> {
 
     public ScoredTest getById(Long testId);
 
-    @Query(value = "SELECT * FROM ScoredTest st WHERE st.user_id = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM scored_test st WHERE st.user_id = ?1", nativeQuery = true)
     public List<ScoredTest> findAllByUserId(Long userId);
 }
