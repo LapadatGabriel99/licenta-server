@@ -2,6 +2,7 @@ package com.proiect.licenta.controller;
 
 import com.proiect.licenta.converter.ScoredTestConverter;
 import com.proiect.licenta.dto.ScoredTestDTO;
+import com.proiect.licenta.model.PostAnswersRequest;
 import com.proiect.licenta.service.ScoredTestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,12 +24,12 @@ public class ScoredTestController {
     private ScoredTestConverter scoredTestConverter;
 
     @PostMapping("/post-answers")
-    public ResponseEntity<ScoredTestDTO> postAnswers(@Valid @RequestBody ScoredTestDTO scoredTestDTO) {
+    public ResponseEntity<ScoredTestDTO> postAnswers(@Valid @RequestBody PostAnswersRequest postAnswersRequest) {
 
         return new ResponseEntity<>(
                 scoredTestConverter.modelToDTO(scoredTestService.saveAnswers(
-                        scoredTestDTO.getTestId(),
-                        scoredTestConverter.dtoToModel(scoredTestDTO))), HttpStatus.CREATED);
+                        postAnswersRequest.getTestId(),
+                        postAnswersRequest.getPostAnswers())), HttpStatus.CREATED);
     }
 
     @GetMapping("/all")

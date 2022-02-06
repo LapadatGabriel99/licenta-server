@@ -1,14 +1,16 @@
 package com.proiect.licenta.service;
 
 import com.proiect.licenta.exception.ResourceNotFoundException;
-import com.proiect.licenta.model.ScoredTest;
+import com.proiect.licenta.model.*;
 import com.proiect.licenta.repository.ScoredTestRepository;
 import com.proiect.licenta.repository.TestRepository;
 import com.proiect.licenta.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Column;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ScoredTestService {
@@ -22,7 +24,7 @@ public class ScoredTestService {
     @Autowired
     private UserService userService;
 
-    public ScoredTest saveAnswers(Long testId, ScoredTest scoredTest) {
+    public ScoredTest saveAnswers(Long testId, List<PostAnswer> postAnswers) {
 
         var test = testRepository.findById(testId);
 
@@ -30,6 +32,10 @@ public class ScoredTestService {
 
             throw new ResourceNotFoundException(String.format("Test with id: %d not found!", testId));
         }
+
+        var scoredTest = new ScoredTest();
+
+        calculateScore(scoredTest, postAnswers, test.get());
 
         scoredTest.setUser(userService.getUserDetails());
         scoredTest.setTest(test.get());
@@ -76,5 +82,92 @@ public class ScoredTestService {
         actualScoredTest.get().setNumOfWrongAnswers(scoredTest.getNumOfWrongAnswers());
 
         return scoredTestRepository.save(actualScoredTest.get());
+    }
+
+    private void calculateScore(ScoredTest scoredTest, List<PostAnswer> postAnswers, Test test) {
+
+        int numOfCorrectAnswers = 0;
+
+        int numOfWrongAnswers = 0;
+
+        var testQuestions = test.getQuestions();
+
+        for (var testQuestion : testQuestions) {
+
+            if (testQuestion.isHasMultipleAnswers()) {
+
+                var questionAnswers = postAnswers
+                                    .stream()
+                                    .filter(x -> x.getQuestionId().equals(testQuestion.getId()));
+
+                var questionAnswersCount = questionAnswers.count();
+
+                var correctTestAnswers = testQuestion
+                                                .getAnswers()
+                                                .stream()
+                                                .filter(Answer::isCorrect);
+
+                var correctTestAnswersCount = correctTestAnswers.count();
+
+                if (questionAnswersCount > correctTestAnswersCount) {
+
+                    numOfWrongAnswers++;
+                }
+                else if (questionAnswersCount < correctTestAnswersCount) {
+
+                    numOfWrongAnswers++;
+                }
+                else {
+
+                    for (var correctAnswer : correctTestAnswers.collect(Collectors.toList())) {
+
+                        if (questionAnswers.noneMatch(x -> x.getAnswerId() == correctAnswer.getId())) {
+
+                            numOfWrongAnswers++;
+                        }
+                        else {
+
+                            numOfCorrectAnswers++;
+                        }
+                    }
+                }
+            }
+            else {
+
+                var questionAnswers = postAnswers
+                        .stream()
+                        .filter(x -> x.getQuestionId().equals(testQuestion.getId()));
+
+                var correctTestAnswers = testQuestion
+                                                        .getAnswers()
+                                                        .stream()
+                                                        .filter(Answer::isCorrect);
+
+                var questionAnswersCount = questionAnswers.count();
+
+                if (questionAnswersCount > 1) {
+
+                    numOfWrongAnswers++;
+                }
+                else if (questionAnswersCount < 1) {
+
+                    numOfWrongAnswers++;
+                }
+                else {
+
+                    for (var correctAnswer : correctTestAnswers.collect(Collectors.toList())) {
+
+                        if (questionAnswers.anyMatch(x -> x.getAnswerId() == correctAnswer.getId())) {
+
+                            numOfCorrectAnswers++;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        scoredTest.setNumOfWrongAnswers(numOfWrongAnswers);
+        scoredTest.setNumOfCorrectAnswers(numOfCorrectAnswers);
     }
 }
