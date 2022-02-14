@@ -29,6 +29,9 @@ public class ScoredTest {
     @Column(name = "was_test_modified")
     private boolean wasTestModified;
 
+    @Column(name = "was_test_taken")
+    private boolean wasTestTaken;
+
     @Column(name = "num_of_correct_answers")
     private int numOfCorrectAnswers;
 

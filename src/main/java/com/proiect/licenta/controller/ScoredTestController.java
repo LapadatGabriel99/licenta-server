@@ -3,6 +3,7 @@ package com.proiect.licenta.controller;
 import com.proiect.licenta.converter.ScoredTestConverter;
 import com.proiect.licenta.dto.ScoredTestDTO;
 import com.proiect.licenta.model.PostAnswersRequest;
+import com.proiect.licenta.model.UpdateAnswersRequest;
 import com.proiect.licenta.service.ScoredTestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,11 +52,12 @@ public class ScoredTestController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ScoredTestDTO> updateAnswers(@Valid @RequestBody ScoredTestDTO scoredTestDTO) {
+    public ResponseEntity<ScoredTestDTO> updateAnswers(@Valid @RequestBody UpdateAnswersRequest request) {
 
         return new ResponseEntity<>(
                 scoredTestConverter.modelToDTO(scoredTestService.updateAnswers(
-                        scoredTestDTO.getTestId(),
-                        scoredTestConverter.dtoToModel(scoredTestDTO))), HttpStatus.ACCEPTED);
+                        request.getTestId(),
+                        request.getScoredTest(),
+                        request.getPostAnswers())), HttpStatus.ACCEPTED);
     }
 }

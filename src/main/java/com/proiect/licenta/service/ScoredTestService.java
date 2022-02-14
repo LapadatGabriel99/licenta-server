@@ -39,6 +39,7 @@ public class ScoredTestService {
 
         scoredTest.setUser(userService.getUserDetails());
         scoredTest.setTest(test.get());
+        scoredTest.setWasTestTaken(true);
 
         return scoredTestRepository.save(scoredTest);
     }
@@ -60,7 +61,7 @@ public class ScoredTestService {
         return scoredTest.get();
     }
 
-    public ScoredTest updateAnswers(Long testId, ScoredTest scoredTest) {
+    public ScoredTest updateAnswers(Long testId, ScoredTest scoredTest, List<PostAnswer> postAnswers) {
 
         var actualScoredTest = scoredTestRepository.findById(scoredTest.getId());
 
@@ -76,10 +77,9 @@ public class ScoredTestService {
             throw new ResourceNotFoundException(String.format("Test with id: %d not found!", testId));
         }
 
+        calculateScore(actualScoredTest.get(), postAnswers, test.get());
         actualScoredTest.get().setTest(test.get());
         actualScoredTest.get().setUser(userService.getUserDetails());
-        actualScoredTest.get().setNumOfCorrectAnswers(scoredTest.getNumOfCorrectAnswers());
-        actualScoredTest.get().setNumOfWrongAnswers(scoredTest.getNumOfWrongAnswers());
 
         return scoredTestRepository.save(actualScoredTest.get());
     }

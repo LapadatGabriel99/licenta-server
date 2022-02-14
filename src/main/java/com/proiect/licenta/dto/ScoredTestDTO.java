@@ -23,4 +23,6 @@ public class ScoredTestDTO {
     private int numOfCorrectAnswers;
 
     private int numOfWrongAnswers;
+
+    private boolean wasTestTaken;
 }
