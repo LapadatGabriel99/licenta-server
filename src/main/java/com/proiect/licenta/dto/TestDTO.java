@@ -3,6 +3,7 @@ package com.proiect.licenta.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
@@ -18,6 +19,8 @@ public class TestDTO {
     private Long categoryId;
 
     private String categoryName;
+
+    private boolean wasTestTaken;
 
     private List<QuestionDTO> questions;
 }

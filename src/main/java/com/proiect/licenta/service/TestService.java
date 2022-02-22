@@ -101,6 +101,12 @@ public class TestService {
         return testRepository.save(actualTest.get());
     }
 
+    public void updateTestStatus(Test test) {
+
+        test.setWasTestTaken(true);
+        testRepository.save(test);
+    }
+
     public Test addQuestion(Question question) {
 
         var test = testRepository.findById(question.getTest().getId());

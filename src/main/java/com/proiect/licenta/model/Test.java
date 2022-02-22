@@ -24,6 +24,9 @@ public class Test {
     @NotBlank(message = "Name can't be empty!")
     private String name;
 
+    @Column(name = "was_test_taken")
+    private boolean wasTestTaken;
+
     @Transient
     private String categoryName;
 

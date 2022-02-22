@@ -4,12 +4,11 @@ import com.proiect.licenta.exception.ResourceNotFoundException;
 import com.proiect.licenta.model.*;
 import com.proiect.licenta.repository.ScoredTestRepository;
 import com.proiect.licenta.repository.TestRepository;
-import com.proiect.licenta.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.Column;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +23,9 @@ public class ScoredTestService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private TestService testService;
+
     public ScoredTest saveAnswers(Long testId, List<PostAnswer> postAnswers) {
 
         var test = testRepository.findById(testId);
@@ -37,9 +39,12 @@ public class ScoredTestService {
 
         calculateScore(scoredTest, postAnswers, test.get());
 
+        scoredTest.setName(test.get().getName());
         scoredTest.setUser(userService.getUserDetails());
         scoredTest.setTest(test.get());
         scoredTest.setWasTestTaken(true);
+
+        testService.updateTestStatus(test.get());
 
         return scoredTestRepository.save(scoredTest);
     }
@@ -78,6 +83,7 @@ public class ScoredTestService {
         }
 
         calculateScore(actualScoredTest.get(), postAnswers, test.get());
+        actualScoredTest.get().setName(test.get().getName());
         actualScoredTest.get().setTest(test.get());
         actualScoredTest.get().setUser(userService.getUserDetails());
 
@@ -98,16 +104,18 @@ public class ScoredTestService {
 
                 var questionAnswers = postAnswers
                                     .stream()
-                                    .filter(x -> x.getQuestionId().equals(testQuestion.getId()));
+                                    .filter(x -> x.getQuestionId().equals(testQuestion.getId()))
+                                    .collect(Collectors.toList());
 
-                var questionAnswersCount = questionAnswers.count();
+                var questionAnswersCount = questionAnswers.size();
 
                 var correctTestAnswers = testQuestion
                                                 .getAnswers()
                                                 .stream()
-                                                .filter(Answer::isCorrect);
+                                                .filter(Answer::isCorrect)
+                                                .collect(Collectors.toList());
 
-                var correctTestAnswersCount = correctTestAnswers.count();
+                var correctTestAnswersCount = correctTestAnswers.size();
 
                 if (questionAnswersCount > correctTestAnswersCount) {
 
@@ -119,9 +127,9 @@ public class ScoredTestService {
                 }
                 else {
 
-                    for (var correctAnswer : correctTestAnswers.collect(Collectors.toList())) {
+                    for (var correctAnswer : correctTestAnswers) {
 
-                        if (questionAnswers.noneMatch(x -> x.getAnswerId() == correctAnswer.getId())) {
+                        if (questionAnswers.stream().allMatch(x -> !Objects.equals(x.getAnswerId(), correctAnswer.getId()))) {
 
                             numOfWrongAnswers++;
                         }
@@ -136,14 +144,16 @@ public class ScoredTestService {
 
                 var questionAnswers = postAnswers
                         .stream()
-                        .filter(x -> x.getQuestionId().equals(testQuestion.getId()));
+                        .filter(x -> x.getQuestionId().equals(testQuestion.getId()))
+                        .collect(Collectors.toList());
 
                 var correctTestAnswers = testQuestion
                                                         .getAnswers()
                                                         .stream()
-                                                        .filter(Answer::isCorrect);
+                                                        .filter(Answer::isCorrect)
+                                                        .collect(Collectors.toList());
 
-                var questionAnswersCount = questionAnswers.count();
+                var questionAnswersCount = questionAnswers.size();
 
                 if (questionAnswersCount > 1) {
 
@@ -155,11 +165,16 @@ public class ScoredTestService {
                 }
                 else {
 
-                    for (var correctAnswer : correctTestAnswers.collect(Collectors.toList())) {
+                    for (var correctAnswer : correctTestAnswers) {
 
-                        if (questionAnswers.anyMatch(x -> x.getAnswerId() == correctAnswer.getId())) {
+                        if (questionAnswers.stream().anyMatch(x -> Objects.equals(x.getAnswerId(), correctAnswer.getId()))) {
 
                             numOfCorrectAnswers++;
+                            break;
+                        }
+                        else {
+
+                            numOfWrongAnswers++;
                             break;
                         }
                     }
