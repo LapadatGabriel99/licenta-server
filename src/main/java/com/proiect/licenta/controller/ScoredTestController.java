@@ -51,6 +51,13 @@ public class ScoredTestController {
                 scoredTestConverter.modelToDTO(scoredTestService.findById(id)), HttpStatus.OK);
     }
 
+    @GetMapping("/get-by-test-id/{id}")
+    public ResponseEntity<ScoredTestDTO> getScoredTestByTestId(@PathVariable(name = "id") Long id) {
+
+        return new ResponseEntity<>(
+                scoredTestConverter.modelToDTO(scoredTestService.findByTestId(id)), HttpStatus.OK);
+    }
+
     @PutMapping("/update")
     public ResponseEntity<ScoredTestDTO> updateAnswers(@Valid @RequestBody UpdateAnswersRequest request) {
 

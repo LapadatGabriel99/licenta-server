@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ScoredTestRepository extends JpaRepository<ScoredTest, Long> {
@@ -15,4 +16,7 @@ public interface ScoredTestRepository extends JpaRepository<ScoredTest, Long> {
 
     @Query(value = "SELECT * FROM scored_test st WHERE st.user_id = ?1", nativeQuery = true)
     public List<ScoredTest> findAllByUserId(Long userId);
+
+    @Query(value = "SELECT * FROM scored_test st WHERE st.test_id = ?1", nativeQuery = true)
+    public Optional<ScoredTest> findByTestId(Long testId);
 }

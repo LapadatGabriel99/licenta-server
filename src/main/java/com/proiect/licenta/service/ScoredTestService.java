@@ -66,6 +66,18 @@ public class ScoredTestService {
         return scoredTest.get();
     }
 
+    public ScoredTest findByTestId(Long id){
+
+        var scoredTest = scoredTestRepository.findByTestId(id);
+
+        if (scoredTest.isEmpty()) {
+
+            throw new ResourceNotFoundException(String.format("Scored test with id: %d not found!", id));
+        }
+
+        return scoredTest.get();
+    }
+
     public ScoredTest updateAnswers(Long testId, ScoredTest scoredTest, List<PostAnswer> postAnswers) {
 
         var actualScoredTest = scoredTestRepository.findById(scoredTest.getId());

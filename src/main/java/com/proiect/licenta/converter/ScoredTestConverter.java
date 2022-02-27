@@ -14,6 +14,7 @@ public class ScoredTestConverter {
 
         var dto = mapper.map(scoredTest, ScoredTestDTO.class);
         dto.setTestId(scoredTest.getTest().getId());
+        dto.setCategoryName(scoredTest.getTest().getCategoryName());
 
         return dto;
     }
