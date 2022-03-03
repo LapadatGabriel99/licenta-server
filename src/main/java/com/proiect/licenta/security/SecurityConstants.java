@@ -16,4 +16,5 @@ public class SecurityConstants {
     public static final String FORGOT_PASSWORD_URL = "/api/user/forgot-password";
     public static final String RESET_PASSWORD_URL = "/api/user/reset-password*";
     public static final String UPDATE_PASSWORD_URL = "/api/user/update-password";
+    public static final String ALLOW_ALL_URL = "/api/fake/allow-all";
 }
