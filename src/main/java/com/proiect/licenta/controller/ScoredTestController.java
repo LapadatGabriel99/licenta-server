@@ -26,7 +26,6 @@ public class ScoredTestController {
     private ScoredTestConverter scoredTestConverter;
 
     @PostMapping("/post-answers")
-    @PreAuthorize("hasAuthority('PLAYER')")
     public ResponseEntity<ScoredTestDTO> postAnswers(@Valid @RequestBody PostAnswersRequest postAnswersRequest) {
 
         return new ResponseEntity<>(
@@ -36,7 +35,6 @@ public class ScoredTestController {
     }
 
     @GetMapping("/all")
-    @PreAuthorize("hasAuthority('PLAYER')")
     public ResponseEntity<List<ScoredTestDTO>> getAll() {
 
         return new ResponseEntity<>(
@@ -48,7 +46,6 @@ public class ScoredTestController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('PLAYER')")
     public ResponseEntity<ScoredTestDTO> getScoredTestById(@PathVariable(name = "id") Long id) {
 
         return new ResponseEntity<>(
@@ -56,7 +53,6 @@ public class ScoredTestController {
     }
 
     @GetMapping("/get-by-test-id/{id}")
-    @PreAuthorize("hasAuthority('PLAYER')")
     public ResponseEntity<ScoredTestDTO> getScoredTestByTestId(@PathVariable(name = "id") Long id) {
 
         return new ResponseEntity<>(
@@ -64,7 +60,6 @@ public class ScoredTestController {
     }
 
     @PutMapping("/update")
-    @PreAuthorize("hasAuthority('PLAYER')")
     public ResponseEntity<ScoredTestDTO> updateAnswers(@Valid @RequestBody UpdateAnswersRequest request) {
 
         return new ResponseEntity<>(

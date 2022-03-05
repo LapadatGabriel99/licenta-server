@@ -26,7 +26,6 @@ public class TestController {
     private TestConverter testConverter;
 
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<TestDTO> createTest(@Valid @RequestBody TestDTO testDTO) {
 
         return new ResponseEntity<>(
@@ -34,7 +33,6 @@ public class TestController {
     }
 
     @GetMapping("/all")
-    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<List<TestDTO>> getAllTests() {
 
         return new ResponseEntity<>(
@@ -46,7 +44,6 @@ public class TestController {
     }
 
     @GetMapping("/player/all")
-    @PreAuthorize("hasAuthority('PLAYER')")
     public ResponseEntity<List<TestDTO>> getAllTestsForPlayer() {
 
         return new ResponseEntity<>(
@@ -58,7 +55,6 @@ public class TestController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<TestDTO> getTestById(@PathVariable(name = "id") Long id) {
 
         var test = testService.findById(id);
@@ -72,7 +68,6 @@ public class TestController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<Boolean> deleteTest(@PathVariable(name = "id") Long id) {
 
         if (!testService.delete(id)) {
@@ -84,7 +79,6 @@ public class TestController {
     }
 
     @PutMapping("/update")
-    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<TestDTO> updateTest(@Valid @RequestBody TestDTO testDTO) {
 
         return new ResponseEntity<>(
